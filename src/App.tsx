@@ -1,9 +1,10 @@
-import React from "react";
+import React from 'react'
+import Layout from './components/layout'
+
 const App: React.FC = (props) => {
+	console.log('I rendered')
 
-    let a = 10
-    // a = "string"
-  return <div>Webpack is cool!</div>
-};
+	return <Layout>Webpack is cool!</Layout>
+}
 
-export default App;
+export default App
