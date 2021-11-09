@@ -118,10 +118,6 @@
         "trailingComma": "none"
       }
     ],
-    "quote-props": [
-      "as-needed",
-      1
-    ],
     "quotes": [
       "error",
       "single"
