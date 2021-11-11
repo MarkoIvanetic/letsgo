@@ -1,1 +1,56 @@
-node_modules
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+
+# Dependencies
+node_modules/
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Because we are using Yarn
+package-lock.json
+
+# Nest.js
+
+# Next.js
+.next
+
+# Environment & infrastructure
+.env
+.data
+ormconfig.json
+ormlogs.log
+
+# Sitemap
+/sitemap
