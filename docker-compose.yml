@@ -1,0 +1,33 @@
+version: '3'
+services:
+  api:
+    env_file:
+      - .env
+    # Create backend container
+    build:
+      context: ./api
+      dockerfile: ./Dockerfile
+      args:
+        - CMC_API_KEY=$CMC_API_KEY
+        - API_PORT=$API_PORT
+        - NODE_VERSION=$NODE_VERSION
+    ports:
+      - "8080:8080"
+    container_name: letsgo-api
+    restart: always
+  web:
+    env_file:
+      - .env
+    # Create backend container
+    build:
+      context: ./app
+      dockerfile: ./Dockerfile
+      args:
+        - CMC_API_KEY=$CMC_API_KEY
+        - API_PORT=$API_PORT
+        - NODE_VERSION=$NODE_VERSION
+    ports:
+      - "3000:3000"
+    container_name: letsgo-web
+    restart: always
+

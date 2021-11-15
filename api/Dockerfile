@@ -1,0 +1,11 @@
+ARG CMC_API_KEY
+ARG API_PORT
+ARG NODE_VERSION
+
+FROM node:$NODE_VERSION-alpine
+WORKDIR /app
+COPY ./ /app
+RUN npm install
+
+EXPOSE 8080
+CMD node bin/www
