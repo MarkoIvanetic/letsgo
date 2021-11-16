@@ -23,7 +23,7 @@ const App: React.FC = () => {
     return (
         <>
             <CssBaseline />
-            <Layout>Webpack is cool!</Layout>
+            <Layout>Webpack is cool!! oh yeah</Layout>
         </>
     )
 }
