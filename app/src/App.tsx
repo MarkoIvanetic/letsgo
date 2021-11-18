@@ -1,12 +1,12 @@
 import { CssBaseline } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 // import Layout from './components/layout'
-import Layout from '@components/layout'
+import Layout from '@/components/layout'
 import axios, { AxiosResponse } from 'axios'
 
 const client = axios.create({
     baseURL: process.env.API_ENDPOINT,
-    timeout: 1000
+    timeout: 5000
     // headers: DEFAULT_HEADERS
 })
 

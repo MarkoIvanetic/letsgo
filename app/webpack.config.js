@@ -28,7 +28,8 @@ function getCustomWebpackConfig() {
             filename: 'bundle.js'
         },
         resolve: {
-            extensions: ['.js', '.jsx', '.ts', '.tsx']
+            extensions: ['.js', '.jsx', '.ts', '.tsx'],
+            plugins: [new TsconfigPathsPlugin({ configFile: './tsconfig.json' })]
         },
         watchOptions: {
             aggregateTimeout: 500, // delay before reloading
@@ -49,8 +50,7 @@ function getCustomWebpackConfig() {
                 filename: 'index.html',
                 inject: 'body'
             }),
-            new webpack.DefinePlugin(envKeys),
-            new TsconfigPathsPlugin({ configFile: './tsconfig.json' })
+            new webpack.DefinePlugin(envKeys)
         ]
     }
 
@@ -61,8 +61,7 @@ function getCustomWebpackConfig() {
     } else {
         config.devServer = {
             port: 3000,
-            open: true,
-            host: '0.0.0.0'
+            open: true
         }
     }
 
