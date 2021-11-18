@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const { resolve } = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserWebpackPlugin = require('terser-webpack-plugin')
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 const dotenv = require('dotenv')
 
 const isDev = process.env.NODE_ENV !== 'production'
@@ -48,7 +49,8 @@ function getCustomWebpackConfig() {
                 filename: 'index.html',
                 inject: 'body'
             }),
-            new webpack.DefinePlugin(envKeys)
+            new webpack.DefinePlugin(envKeys),
+            new TsconfigPathsPlugin({ configFile: './tsconfig.json' })
         ]
     }
 

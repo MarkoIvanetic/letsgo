@@ -1,29 +1,45 @@
 import { CssBaseline } from '@mui/material'
-import React from 'react'
-import Layout from './components/layout'
-import axios, { AxiosRequestHeaders } from 'axios'
-
-const DEFAULT_HEADERS: AxiosRequestHeaders = {
-    'X-CMC_PRO_API_KEY': process.env.CMC_API_KEY as string
-}
+import React, { useEffect, useState } from 'react'
+// import Layout from './components/layout'
+import Layout from '@components/layout'
+import axios, { AxiosResponse } from 'axios'
 
 const client = axios.create({
-    baseURL: 'https://pro-api.coinmarketcap.com/v1/cryptocurrency',
-    timeout: 1000,
-    headers: DEFAULT_HEADERS
+    baseURL: process.env.API_ENDPOINT,
+    timeout: 1000
+    // headers: DEFAULT_HEADERS
 })
 
-const App: React.FC = () => {
-    console.log('I rendered:', DEFAULT_HEADERS)
+interface Article {
+    title: string
+    url: string
+}
 
-    client.get('listing/latest').then((response: any) => {
-        console.log(response)
-    })
+const App: React.FC = () => {
+    const [data, setData] = useState<Article[] | null>(null)
+
+    useEffect(() => {
+        client.get('news/top').then((data: AxiosResponse) => {
+            const {
+                data: { articles }
+            } = data
+
+            setData(articles as Article[])
+        })
+    }, [])
+
+    if (!data) {
+        return <span>Loading...</span>
+    }
 
     return (
         <>
             <CssBaseline />
-            <Layout>Webpack is cool!! oh yes</Layout>
+            <Layout>
+                {data.map(article => {
+                    return <h2 key={article.url}>{article.title}</h2>
+                })}
+            </Layout>
         </>
     )
 }
