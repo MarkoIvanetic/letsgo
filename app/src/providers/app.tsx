@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { Button, Container, CssBaseline, Typography } from '@mui/material'
+import { Button, Box, Container, CssBaseline, Typography } from '@mui/material'
 // import { HelmetProvider } from 'react-helmet-async'
 import { QueryClientProvider } from 'react-query'
 import { AxiosError } from 'axios'
@@ -10,7 +10,8 @@ import { ReactQueryDevtools } from 'react-query/devtools'
 // import { Notifications } from '@/components/Notifications/Notifications/'
 // import { AuthProvider } from '@/lib/auth'
 import { queryClient } from '@/lib/react-query'
-import { Box } from '@mui/system'
+import { theme } from '@/themes/main'
+import { ThemeProvider } from '@mui/material/styles'
 
 type AppProviderProps = {
     children: React.ReactNode
@@ -67,19 +68,21 @@ export const AppProvider = ({ children }: AppProviderProps) => {
                  </div>
              }> */}
             <React.StrictMode>
-                <ErrorBoundary FallbackComponent={ErrorFallback}>
-                    {/* <HelmetProvider> */}
-                    <CssBaseline />
-                    <QueryClientProvider client={queryClient}>
-                        {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
-                        {/* <Notifications /> */}
-                        {/* <AuthProvider> */}
-                        {/* <Router>{children}</Router> */}
-                        {/* </AuthProvider> */}
-                        {children}
-                    </QueryClientProvider>
-                    {/* </HelmetProvider> */}
-                </ErrorBoundary>
+                <ThemeProvider theme={theme}>
+                    <ErrorBoundary FallbackComponent={ErrorFallback}>
+                        {/* <HelmetProvider> */}
+                        <CssBaseline />
+                        <QueryClientProvider client={queryClient}>
+                            {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
+                            {/* <Notifications /> */}
+                            {/* <AuthProvider> */}
+                            {/* <Router>{children}</Router> */}
+                            {/* </AuthProvider> */}
+                            {children}
+                        </QueryClientProvider>
+                        {/* </HelmetProvider> */}
+                    </ErrorBoundary>
+                </ThemeProvider>
             </React.StrictMode>
             {/* </React.Suspense> */}
         </>
