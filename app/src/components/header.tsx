@@ -65,7 +65,7 @@ export default function Header(props: HeaderProps) {
                     </Grid>
                 </Toolbar>
             </AppBar>
-            <AppBar component="div" color="primary" position="static" elevation={0} sx={{ zIndex: 0 }}>
+            <AppBar color="primary" position="static" elevation={0} component="div" sx={{ zIndex: 0 }}>
                 <Toolbar>
                     <Grid container alignItems="center" spacing={1}>
                         <Grid item xs>

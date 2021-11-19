@@ -5,7 +5,7 @@ import { Button, Box, Container, CssBaseline, Typography } from '@mui/material'
 import { QueryClientProvider } from 'react-query'
 import { AxiosError } from 'axios'
 import { ReactQueryDevtools } from 'react-query/devtools'
-// import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 
 // import { Notifications } from '@/components/Notifications/Notifications/'
 // import { AuthProvider } from '@/lib/auth'
@@ -76,9 +76,8 @@ export const AppProvider = ({ children }: AppProviderProps) => {
                             {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
                             {/* <Notifications /> */}
                             {/* <AuthProvider> */}
-                            {/* <Router>{children}</Router> */}
+                            <BrowserRouter>{children}</BrowserRouter>
                             {/* </AuthProvider> */}
-                            {children}
                         </QueryClientProvider>
                         {/* </HelmetProvider> */}
                     </ErrorBoundary>

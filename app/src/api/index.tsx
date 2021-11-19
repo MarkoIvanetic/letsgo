@@ -1,9 +1,5 @@
+import { Article } from '@/types'
 import axios, { AxiosResponse } from 'axios'
-
-interface Article {
-    title: string
-    url: string
-}
 
 const client = axios.create({
     baseURL: process.env.API_ENDPOINT,
