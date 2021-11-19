@@ -6,6 +6,8 @@ var { generateUrlParams } = require('../utils/index')
 
 var router = express.Router()
 
+const URL_BASE = 'https://newsapi.org/v2/'
+
 const getRequestOptions = () => {
     return {
         method: 'GET',
@@ -16,15 +18,13 @@ const getRequestOptions = () => {
 }
 
 const fetchNewsData = (url, params = {}) => {
-    const URL_BASE = 'https://newsapi.org/v2/'
-
     const hasParams = !!Object.keys(params).length
     const paramString = hasParams ? `?${generateUrlParams(params)}` : ''
 
     return fetch(`${URL_BASE}${url}${paramString}`, getRequestOptions())
 }
 
-router.get('/top', async function (req, res) {
+router.get('/top', async function (req, res, next) {
     // req.params
     // req.body
     // req.route.path
@@ -36,10 +36,15 @@ router.get('/top', async function (req, res) {
 
     const data = await response.json()
 
+    // next(data)
     res.send(data)
 })
 
-router.get('/all', async function (req, res) {
+router.get('/', async function (req, res) {
+    res.redirect('/news/all')
+})
+
+router.get('/all', async function (req, res, next) {
     // req.params
     // req.body
     // req.route.path
@@ -63,7 +68,12 @@ router.get('/all', async function (req, res) {
 
     const data = await response.json()
 
-    res.send(data)
+    // res.send(data)
+    next(data)
 })
+
+router.use(function (req,res,next){
+	res.status(404).send({ error: 'Unable to find ' + req.originalUrl });
+});
 
 module.exports = router

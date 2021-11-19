@@ -1,46 +1,15 @@
-import { CssBaseline } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-// import Layout from './components/layout'
-import Layout from '@/components/layout'
-import axios, { AxiosResponse } from 'axios'
+import React from 'react'
+import { Layout, Newsfeed } from '@/components'
 
-const client = axios.create({
-    baseURL: process.env.API_ENDPOINT,
-    timeout: 5000
-    // headers: DEFAULT_HEADERS
-})
-
-interface Article {
-    title: string
-    url: string
-}
+import { AppProvider } from '@/providers/app'
 
 const App: React.FC = () => {
-    const [data, setData] = useState<Article[] | null>(null)
-
-    useEffect(() => {
-        client.get('news/top').then((data: AxiosResponse) => {
-            const {
-                data: { articles }
-            } = data
-
-            setData(articles as Article[])
-        })
-    }, [])
-
-    if (!data) {
-        return <span>Loading...</span>
-    }
-
     return (
-        <>
-            <CssBaseline />
+        <AppProvider>
             <Layout>
-                {data.map(article => {
-                    return <h2 key={article.url}>{article.title}</h2>
-                })}
+                <Newsfeed />
             </Layout>
-        </>
+        </AppProvider>
     )
 }
 

@@ -20,6 +20,7 @@ function getCustomWebpackConfig() {
 
     const config = {
         mode: isDev ? 'development' : 'production',
+        devtool: isDev ? 'eval-cheap-module-source-map' : 'source-map',
         entry: {
             index: './src/index.tsx'
         },
