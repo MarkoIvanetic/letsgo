@@ -3,4 +3,5 @@ export interface Article {
     url: string
     urlToImage: string
     description: string
+    content: string
 }

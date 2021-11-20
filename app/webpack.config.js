@@ -26,7 +26,8 @@ function getCustomWebpackConfig() {
         },
         output: {
             path: resolve(__dirname, 'dist'),
-            filename: 'bundle.js'
+            filename: 'bundle.js',
+            publicPath: '/'
         },
         resolve: {
             extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -62,7 +63,8 @@ function getCustomWebpackConfig() {
     } else {
         config.devServer = {
             port: 3000,
-            open: true
+            open: true,
+            historyApiFallback: true
         }
     }
 

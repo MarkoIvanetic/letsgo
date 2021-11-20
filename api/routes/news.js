@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable @typescript-eslint/no-var-requires */
 var express = require('express')
+var UUID = require('uuid-1345')
 var fetch = require('node-fetch')
 var { generateUrlParams } = require('../utils/index')
 
@@ -24,7 +25,37 @@ const fetchNewsData = (url, params = {}) => {
     return fetch(`${URL_BASE}${url}${paramString}`, getRequestOptions())
 }
 
-router.get('/top', async function (req, res, next) {
+const generateUUIDFromUrl = url => {
+    return UUID.v5({
+        namespace: UUID.namespace.url,
+        name: url
+    })
+}
+
+const generateSlugFromTitle = title => {
+    if (!title || typeof title !== 'string') {
+        console.log(title)
+        console.log(typeof title)
+        throw new Error('Title is missing from an article!')
+    }
+    return title
+        .toLowerCase()
+        .replace(/[^A-Za-z0-9 ]/g, '')
+        .split(' ')
+        .filter(w => !!w)
+        .slice(0, 5)
+        .join('-')
+}
+
+const transformArticle = article => {
+    const id = generateUUIDFromUrl(article.url)
+    console.log(id)
+    const slug = generateSlugFromTitle(article.title) + '-' + id
+
+    return { ...article, slug, id }
+}
+
+router.get('/top', async function (req, res) {
     // req.params
     // req.body
     // req.route.path
@@ -36,15 +67,16 @@ router.get('/top', async function (req, res, next) {
 
     const data = await response.json()
 
-    // next(data)
-    res.send(data)
+    enrichedData = { ...data, articles: data.articles.map(transformArticle) }
+
+    res.send(enrichedData)
 })
 
 router.get('/', async function (req, res) {
     res.redirect('/news/all')
 })
 
-router.get('/all', async function (req, res, next) {
+router.get('/all', async function (req, res) {
     // req.params
     // req.body
     // req.route.path
@@ -68,12 +100,13 @@ router.get('/all', async function (req, res, next) {
 
     const data = await response.json()
 
-    // res.send(data)
-    next(data)
+    enrichedData = { ...data, articles: data.articles.map(transformArticle) }
+
+    res.send(enrichedData)
 })
 
-router.use(function (req,res,next){
-	res.status(404).send({ error: 'Unable to find ' + req.originalUrl });
-});
+router.use(function (req, res) {
+    res.status(404).send({ error: 'Unable to find ' + req.originalUrl })
+})
 
 module.exports = router
