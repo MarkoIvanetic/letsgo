@@ -28,6 +28,7 @@ services:
         - NODE_ENV=${NODE_ENV?err}
     volumes:
       - ./app:/app
+      - /app/node_modules
     ports:
       - "3000:3000"
     container_name: letsgo-web

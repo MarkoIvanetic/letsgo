@@ -32,6 +32,8 @@ const getArticle = (slug: string): Promise<Article> => {
             data: { articles }
         } = data
 
+        // this is one nasty workaround
+        // compensating for a api with no route for single article
         return articles.find((article: Article) => article.slug === slug)
     })
 }
