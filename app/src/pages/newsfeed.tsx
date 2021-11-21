@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material'
-import { getNewsData } from '@/api'
+import { getArticleList } from '@/api'
 import { Article } from '@/types'
+import { Link } from 'react-router-dom'
 
 export const Newsfeed: React.FC = () => {
     const page = 1
 
-    const { isLoading, isError, error, data = [], status } = useQuery(['news', page], getNewsData)
+    const { isLoading, isError, error, data = [], status } = useQuery(['news', page], getArticleList)
 
     if (isLoading) {
         return <span>Loading...</span>
@@ -49,17 +50,13 @@ export const FeedItem: React.FC<FeedItemProps> = ({ data }) => {
                 <Typography gutterBottom variant="h5" component="div">
                     {data.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                    {data.description}
-                </Typography>
+                <Typography variant="body2" color="text.secondary"></Typography>
             </CardContent>
             <CardActions>
                 <Button variant="contained" size="small">
                     Share
                 </Button>
-                <Button variant="contained" size="small">
-                    Expand
-                </Button>
+                <Link to={data.slug}>Open</Link>
             </CardActions>
         </Card>
     )

@@ -16,7 +16,7 @@ axios.interceptors.response.use(
     }
 )
 
-const getNewsData = (): Promise<Article[]> => {
+const getArticleList = (): Promise<Article[]> => {
     return client.get('news/top').then((data: AxiosResponse) => {
         const {
             data: { articles }
@@ -26,4 +26,14 @@ const getNewsData = (): Promise<Article[]> => {
     })
 }
 
-export { client, getNewsData }
+const getArticle = (slug: string): Promise<Article> => {
+    return client.get('news/top').then((data: AxiosResponse) => {
+        const {
+            data: { articles }
+        } = data
+
+        return articles.find((article: Article) => article.slug === slug)
+    })
+}
+
+export { client, getArticleList, getArticle }

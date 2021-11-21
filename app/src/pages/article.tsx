@@ -1,21 +1,20 @@
 import React from 'react'
 import { useQuery } from 'react-query'
 import { Card, CardContent, CardMedia, Typography } from '@mui/material'
-import { getNewsData } from '@/api'
+import { getArticle } from '@/api'
 import { useLocation } from 'react-router'
 
 export const Article: React.FC = () => {
     const location = useLocation()
 
-    const pathname = location.pathname.replace('news/', '')
+    const pathname: string = location.pathname.split('/').pop() || ''
 
+    console.log(location.pathname)
     console.log(pathname)
 
-    const { isLoading, isError, error, data: allArticles = [], status } = useQuery(['news'], getNewsData)
+    const { isLoading, data } = useQuery(['news', pathname], () => getArticle(pathname))
 
-    const data = allArticles[0]
-
-    if (isLoading) {
+    if (isLoading || !data) {
         return <span>Loading...</span>
     }
 
