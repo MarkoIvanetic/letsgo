@@ -21,13 +21,11 @@ function getCustomWebpackConfig() {
     const config = {
         mode: isDev ? 'development' : 'production',
         devtool: isDev ? 'eval-cheap-module-source-map' : 'source-map',
-        entry: {
-            index: './src/index.tsx'
-        },
+        entry: ['webpack/hot/dev-server', './src/index.tsx'],
         output: {
             path: resolve(__dirname, 'dist'),
             filename: 'bundle.js',
-            publicPath: '/'
+            publicPath: isDev ? 'http://localhost:3000/' : '/'
         },
         resolve: {
             extensions: ['.js', '.jsx', '.ts', '.tsx'],
