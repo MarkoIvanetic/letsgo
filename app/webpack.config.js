@@ -5,18 +5,11 @@ const { resolve } = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserWebpackPlugin = require('terser-webpack-plugin')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
-const dotenv = require('dotenv')
+const Dotenv = require('dotenv-webpack');
 
 const isDev = process.env.NODE_ENV !== 'production'
 
 function getCustomWebpackConfig() {
-    const env = dotenv.config().parsed
-
-    // reduce it to a nice object, the same as before
-    const envKeys = Object.keys(env).reduce((prev, next) => {
-        prev[`process.env.${next}`] = JSON.stringify(env[next])
-        return prev
-    }, {})
 
     const config = {
         mode: isDev ? 'development' : 'production',
@@ -45,12 +38,13 @@ function getCustomWebpackConfig() {
             ]
         },
         plugins: [
+            new Dotenv({path: '../.env'}),
             new HtmlWebpackPlugin({
                 template: './src/index.html',
                 filename: 'index.html',
                 inject: 'body'
             }),
-            new webpack.DefinePlugin(envKeys)
+            // new webpack.DefinePlugin(envKeys)
         ]
     }
 

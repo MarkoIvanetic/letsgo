@@ -14,23 +14,23 @@ services:
       - "8080:8080"
     container_name: letsgo-api
     restart: always
-  web:
-    env_file:
-      - .env
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    build:
-      context: ./app
-      dockerfile: ./Dockerfile
-      args:
-        - API_PORT=${API_PORT?err}
-        - NODE_VERSION=${NODE_VERSION?err}
-        - NODE_ENV=${NODE_ENV?err}
-    volumes:
-      - ./app:/app
-      - /app/node_modules
-    ports:
-      - "3000:3000"
-    container_name: letsgo-web
-    restart: always
+  # web:
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - CHOKIDAR_USEPOLLING=true
+  #   build:
+  #     context: ./app
+  #     dockerfile: ./Dockerfile
+  #     args:
+  #       - API_ENDPOINT=${API_ENDPOINT?err}
+  #       - NODE_VERSION=${NODE_VERSION?err}
+  #       - NODE_ENV=${NODE_ENV?err}
+  #   volumes:
+  #     - ./app:/app
+  #     - /app/node_modules
+  #   ports:
+  #     - "3000:3000"
+  #   container_name: letsgo-web
+  #   restart: always
 
