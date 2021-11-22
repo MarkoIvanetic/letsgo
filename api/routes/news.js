@@ -3,7 +3,7 @@
 var express = require('express')
 var UUID = require('uuid-1345')
 var fetch = require('node-fetch')
-var { generateUrlParams, generateSlugFromTitle } = require('../utils/index')
+var { generateUrlParams, generateSlugFromTitle, generateUUID } = require('../utils/index')
 
 var router = express.Router()
 

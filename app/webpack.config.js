@@ -5,12 +5,22 @@ const { resolve } = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserWebpackPlugin = require('terser-webpack-plugin')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
-const Dotenv = require('dotenv-webpack');
+const dotenv = require('dotenv')
+
+const dockerFallbackEnv = {
+    API_ENDPOINT: process.env.API_ENDPOINT,
+    CHOKIDAR_USEPOLLING: process.env.CHOKIDAR_USEPOLLING
+}
+
+const envConfig = dotenv.config({ path: resolve(__dirname, '..', '.env') }).parsed || dockerFallbackEnv
 
 const isDev = process.env.NODE_ENV !== 'production'
 
-function getCustomWebpackConfig() {
+const envKeys = Object.keys(envConfig).reduce((acc, iter) => {
+    return { ...acc, [iter]: JSON.stringify(envConfig[iter]) }
+}, {})
 
+function getCustomWebpackConfig() {
     const config = {
         mode: isDev ? 'development' : 'production',
         devtool: isDev ? 'eval-cheap-module-source-map' : 'source-map',
@@ -38,13 +48,14 @@ function getCustomWebpackConfig() {
             ]
         },
         plugins: [
-            new Dotenv({path: '../.env'}),
             new HtmlWebpackPlugin({
                 template: './src/index.html',
                 filename: 'index.html',
                 inject: 'body'
             }),
-            // new webpack.DefinePlugin(envKeys)
+            new webpack.DefinePlugin({
+                process: envKeys
+            })
         ]
     }
 

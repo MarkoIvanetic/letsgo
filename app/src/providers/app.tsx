@@ -73,7 +73,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
                         {/* <HelmetProvider> */}
                         <CssBaseline />
                         <QueryClientProvider client={queryClient}>
-                            {process.env.NODE_ENV !== 'test' && <ReactQueryDevtools />}
+                            {process.NODE_ENV !== 'production' && <ReactQueryDevtools />}
                             {/* <Notifications /> */}
                             {/* <AuthProvider> */}
                             <BrowserRouter>{children}</BrowserRouter>

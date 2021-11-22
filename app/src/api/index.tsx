@@ -2,9 +2,8 @@ import { Article } from '@/types'
 import axios, { AxiosResponse } from 'axios'
 
 const client = axios.create({
-    baseURL: process.env.API_ENDPOINT,
+    baseURL: process.API_ENDPOINT,
     timeout: 5000
-    // headers: DEFAULT_HEADERS
 })
 
 axios.interceptors.response.use(
