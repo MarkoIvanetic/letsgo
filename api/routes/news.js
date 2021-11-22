@@ -3,13 +3,13 @@
 var express = require('express')
 var UUID = require('uuid-1345')
 var fetch = require('node-fetch')
-var { generateUrlParams } = require('../utils/index')
+var { generateUrlParams, generateSlugFromTitle } = require('../utils/index')
 
 var router = express.Router()
 
 const URL_BASE = 'https://newsapi.org/v2/'
 
-const getRequestOptions = () => {
+const defaultRequestConfig = () => {
     return {
         method: 'GET',
         headers: {
@@ -22,43 +22,23 @@ const fetchNewsData = (url, params = {}) => {
     const hasParams = !!Object.keys(params).length
     const paramString = hasParams ? `?${generateUrlParams(params)}` : ''
 
-    return fetch(`${URL_BASE}${url}${paramString}`, getRequestOptions())
-}
-
-const generateUUIDFromUrl = url => {
-    return UUID.v5({
-        namespace: UUID.namespace.url,
-        name: url
-    })
-}
-
-const generateSlugFromTitle = title => {
-    if (!title || typeof title !== 'string') {
-        console.log(title)
-        console.log(typeof title)
-        throw new Error('Title is missing from an article!')
-    }
-    return title
-        .toLowerCase()
-        .replace(/[^A-Za-z0-9 ]/g, '')
-        .split(' ')
-        .filter(w => !!w)
-        .slice(0, 5)
-        .join('-')
+    return fetch(`${URL_BASE}${url}${paramString}`, defaultRequestConfig())
 }
 
 const transformArticle = article => {
-    const id = generateUUIDFromUrl(article.url)
+    const id = generateUUID(article.url)
     console.log(id)
     const slug = generateSlugFromTitle(article.title) + '-' + id
 
     return { ...article, slug, id }
 }
 
+router.get('/', async function (req, res) {
+    res.redirect('/news/top')
+})
+
+
 router.get('/top', async function (req, res) {
-    // req.params
-    // req.body
-    // req.route.path
 
     const response = await fetchNewsData('top-headlines', {
         country: 'us',
@@ -72,35 +52,16 @@ router.get('/top', async function (req, res) {
     res.send(enrichedData)
 })
 
-router.get('/', async function (req, res) {
-    res.redirect('/news/all')
-})
-
 router.get('/all', async function (req, res) {
-    // req.params
-    // req.body
-    // req.route.path
-
-    // const allowedParams = {
-    //     q: true,
-    //     sources: true,
-    //     language: true,
-    //     sortBy: true,
-    //     pageSize: true,
-    //     from: true,
-    //     to: true,
-    //     page: true
-    // }
-
-    // const mandatoryParams = ['q', 'qInTitle', 'sources', 'domains']
 
     const response = await fetchNewsData('everything', {
+        q: "world", // api requires some form of search narrowing
         ...req.query
     })
 
     const data = await response.json()
 
-    enrichedData = { ...data, articles: data.articles.map(transformArticle) }
+    enrichedData = { ...data, articles: (data.articles || []).map(transformArticle) }
 
     res.send(enrichedData)
 })
