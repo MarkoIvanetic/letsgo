@@ -1,9 +1,8 @@
 import React from 'react'
 
-import { Container, AppBar, Avatar, Grid, IconButton, Typography, Toolbar } from '@mui/material'
+import { Container, AppBar, Grid, IconButton, Typography, Toolbar } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { useTheme } from '@mui/material/styles'
-import { Box } from '@mui/system'
 
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
@@ -17,6 +16,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
     const theme = useTheme()
+    console.log(theme.palette)
 
     const { toggleColorMode } = React.useContext(ColorModeContext)
 

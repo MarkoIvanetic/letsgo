@@ -12,10 +12,10 @@ const Layout: React.FC = ({ children }) => {
         <Box sx={{ display: 'flex', minHeight: '100vh' }}>
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                 <Header onDrawerToggle={handleDrawerToggle} />
-                <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: 'palette.primary.main' }}>
+                <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: 'grey.800' }}>
                     {children}
                 </Box>
-                <Box component="footer" sx={{ p: 2, backgroundColor: 'palette.primary.dark' }}>
+                <Box component="footer" sx={{ p: 2, backgroundColor: 'grey.100' }}>
                     {/* <Box component="footer" sx={{ p: 2, backgroundColor: '#eaeff1' }}> */}
                     Copyright
                 </Box>

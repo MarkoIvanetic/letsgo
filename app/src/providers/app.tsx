@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { Button, Box, Container, CssBaseline, Typography, useMediaQuery } from '@mui/material'
+import { Button, Box, Container, CssBaseline, Typography } from '@mui/material'
 // import { HelmetProvider } from 'react-helmet-async'
 import { QueryClientProvider } from 'react-query'
 import { AxiosError } from 'axios'
@@ -12,6 +12,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { queryClient } from '@/lib/react-query'
 import { ColorModeContext } from '@/context'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { useDarkMode } from '@/hooks'
 
 type AppProviderProps = {
     children: React.ReactNode
@@ -57,9 +58,9 @@ const ErrorFallback = ({ error }: ErrorFallbackProps) => {
 }
 
 export const AppProvider = ({ children }: AppProviderProps) => {
-    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+    const [darkMode, setDarkMode] = useDarkMode()
 
-    const [mode, setMode] = React.useState<'light' | 'dark'>(prefersDarkMode ? 'dark' : 'light')
+    const [mode, setMode] = React.useState<'light' | 'dark'>(darkMode ? 'dark' : 'light')
 
     const colorMode = useMemo(
         () => ({
@@ -70,15 +71,14 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         []
     )
 
-    const theme = useMemo(
-        () =>
-            createTheme({
-                palette: {
-                    mode
-                }
-            }),
-        [mode]
-    )
+    const theme = useMemo(() => {
+        setDarkMode(mode === 'dark')
+        return createTheme({
+            palette: {
+                mode
+            }
+        })
+    }, [mode])
 
     return (
         <>
