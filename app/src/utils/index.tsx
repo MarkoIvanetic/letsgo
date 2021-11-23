@@ -10,6 +10,9 @@ export const NEWS_CATEGORIES: string[] = [
     'technology'
 ]
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export function noop() {}
+
 export const encodeURLParameterMap = (paramsMap: NewsURLParamMap): string => {
     const queryString = Object.keys(paramsMap)
         .map(key => {

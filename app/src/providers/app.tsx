@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { Button, Box, Container, CssBaseline, Typography } from '@mui/material'
+import { Button, Box, Container, CssBaseline, Typography, useMediaQuery } from '@mui/material'
 // import { HelmetProvider } from 'react-helmet-async'
 import { QueryClientProvider } from 'react-query'
 import { AxiosError } from 'axios'
@@ -10,8 +10,8 @@ import { BrowserRouter } from 'react-router-dom'
 // import { Notifications } from '@/components/Notifications/Notifications/'
 // import { AuthProvider } from '@/lib/auth'
 import { queryClient } from '@/lib/react-query'
-import { theme } from '@/themes/main'
-import { ThemeProvider } from '@mui/material/styles'
+import { ColorModeContext } from '@/context'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 type AppProviderProps = {
     children: React.ReactNode
@@ -57,6 +57,29 @@ const ErrorFallback = ({ error }: ErrorFallbackProps) => {
 }
 
 export const AppProvider = ({ children }: AppProviderProps) => {
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)')
+
+    const [mode, setMode] = React.useState<'light' | 'dark'>(prefersDarkMode ? 'dark' : 'light')
+
+    const colorMode = useMemo(
+        () => ({
+            toggleColorMode: () => {
+                setMode(prevMode => (prevMode === 'light' ? 'dark' : 'light'))
+            }
+        }),
+        []
+    )
+
+    const theme = useMemo(
+        () =>
+            createTheme({
+                palette: {
+                    mode
+                }
+            }),
+        [mode]
+    )
+
     return (
         <>
             {/* <React.Suspense
@@ -66,20 +89,22 @@ export const AppProvider = ({ children }: AppProviderProps) => {
                  </div>
              }> */}
             <React.StrictMode>
-                <ThemeProvider theme={theme}>
-                    <ErrorBoundary FallbackComponent={ErrorFallback}>
-                        {/* <HelmetProvider> */}
-                        <CssBaseline />
-                        <QueryClientProvider client={queryClient}>
-                            {process.NODE_ENV !== 'production' && <ReactQueryDevtools />}
-                            {/* <Notifications /> */}
-                            {/* <AuthProvider> */}
-                            <BrowserRouter>{children}</BrowserRouter>
-                            {/* </AuthProvider> */}
-                        </QueryClientProvider>
-                        {/* </HelmetProvider> */}
-                    </ErrorBoundary>
-                </ThemeProvider>
+                <ColorModeContext.Provider value={colorMode}>
+                    <ThemeProvider theme={theme}>
+                        <ErrorBoundary FallbackComponent={ErrorFallback}>
+                            {/* <HelmetProvider> */}
+                            <CssBaseline />
+                            <QueryClientProvider client={queryClient}>
+                                {process.NODE_ENV !== 'production' && <ReactQueryDevtools />}
+                                {/* <Notifications /> */}
+                                {/* <AuthProvider> */}
+                                <BrowserRouter>{children}</BrowserRouter>
+                                {/* </AuthProvider> */}
+                            </QueryClientProvider>
+                            {/* </HelmetProvider> */}
+                        </ErrorBoundary>
+                    </ThemeProvider>
+                </ColorModeContext.Provider>
             </React.StrictMode>
             {/* </React.Suspense> */}
         </>

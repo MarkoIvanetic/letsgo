@@ -1,14 +1,25 @@
-import * as React from 'react'
+import React from 'react'
 
 import { Container, AppBar, Avatar, Grid, IconButton, Typography, Toolbar } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
+import { useTheme } from '@mui/material/styles'
+import { Box } from '@mui/system'
+
+import Brightness4Icon from '@mui/icons-material/Brightness4'
+import Brightness7Icon from '@mui/icons-material/Brightness7'
+
 import { NavigationLink } from '@/components'
 import { NEWS_CATEGORIES } from '@/utils'
+import { ColorModeContext } from '@/context'
 interface HeaderProps {
     onDrawerToggle: () => void
 }
 
 const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
+    const theme = useTheme()
+
+    const { toggleColorMode } = React.useContext(ColorModeContext)
+
     return (
         <React.Fragment>
             <AppBar color="primary" position="static" elevation={0}>
@@ -23,8 +34,12 @@ const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
                             <Typography variant="h2">News API</Typography>
                         </Grid>
                         <Grid item>
-                            <IconButton color="inherit" sx={{ p: 0.5 }}>
-                                <Avatar />
+                            <IconButton sx={{ ml: 1 }} size="large" onClick={toggleColorMode} color="inherit">
+                                {theme.palette.mode === 'dark' ? (
+                                    <Brightness7Icon fontSize="inherit" />
+                                ) : (
+                                    <Brightness4Icon fontSize="inherit" />
+                                )}
                             </IconButton>
                         </Grid>
                     </Grid>
