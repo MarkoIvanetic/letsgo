@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useQuery } from 'react-query'
 import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material'
 import { getArticleList } from '@/api'
@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 export const Newsfeed: React.FC = () => {
     const page = 1
 
-    const { isLoading, isError, error, data = [], status } = useQuery(['news', page], getArticleList)
+    const { isLoading, isError, data = [] } = useQuery(['news', page], getArticleList)
 
     if (isLoading) {
         return <span>Loading...</span>
@@ -19,11 +19,11 @@ export const Newsfeed: React.FC = () => {
     }
 
     return (
-        <Container>
+        <Container fixed>
             <Grid container spacing={2}>
                 {data.map((article: Article) => {
                     return (
-                        <Grid key={article.url} item xs={2} md={4}>
+                        <Grid key={article.url} item xs={12} md={6} lg={4} xl={3}>
                             <FeedItem data={article}></FeedItem>
                         </Grid>
                     )
@@ -40,12 +40,7 @@ interface FeedItemProps {
 export const FeedItem: React.FC<FeedItemProps> = ({ data }) => {
     return (
         <Card sx={{ maxWidth: 345 }}>
-            <CardMedia
-                component="img"
-                height="200"
-                image={data.urlToImage || 'https://picsum.photos/340/200'}
-                alt={data.title}
-            />
+            <CardMedia component="img" height="200" image={data.urlToImage} alt={data.title} />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
                     {data.title}
@@ -56,15 +51,10 @@ export const FeedItem: React.FC<FeedItemProps> = ({ data }) => {
                 <Button variant="contained" size="small">
                     Share
                 </Button>
-                <Link to={data.slug}>Open</Link>
+                <Button component={Link} to={data.slug} variant="contained" size="small" sx={{ marginLeft: '10px' }}>
+                    Open
+                </Button>
             </CardActions>
         </Card>
     )
-    // return (
-    //     <Grid container spacing={2}>
-    //         <Grid item xs={12}>
-    //             <h2 key={data.url}>{data.title}</h2>
-    //         </Grid>
-    //     </Grid>
-    // )
 }

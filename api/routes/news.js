@@ -29,8 +29,9 @@ const transformArticle = article => {
     const id = generateUUID(article.url)
     console.log(id)
     const slug = generateSlugFromTitle(article.title) + '-' + id
+    const urlToImage = article.urlToImage || 'https://picsum.photos/600/400'
 
-    return { ...article, slug, id }
+    return { ...article, slug, id, urlToImage }
 }
 
 router.get('/', async function (req, res) {

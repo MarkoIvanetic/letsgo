@@ -2,9 +2,7 @@ import { Container } from '@mui/material'
 import { Box } from '@mui/system'
 import Header from './header'
 import React from 'react'
-export const Layout2: React.FC = ({ children }) => {
-    return <Container maxWidth={false}>{children}</Container>
-}
+
 export const Layout: React.FC = ({ children }) => {
     const [mobileOpen, setMobileOpen] = React.useState(false)
 

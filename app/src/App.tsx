@@ -1,7 +1,7 @@
 import React from 'react'
 import { Layout } from '@/components'
 import { Newsfeed, Article } from '@/pages'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { AppProvider } from '@/providers/app'
 
 const App: React.FC = () => {
@@ -9,6 +9,7 @@ const App: React.FC = () => {
         <AppProvider>
             <Layout>
                 <Routes>
+                    <Route path="/" element={<Navigate to="/news" />} />
                     <Route path="/news" element={<Newsfeed />} />
                     <Route path="/news/:slug" element={<Article />} />
                 </Routes>
