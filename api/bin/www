@@ -6,10 +6,11 @@
 
 var app = require('../app')
 var debug = require('debug')('api:server')
+var { resolve } = require('path')
 var dotenv = require('dotenv')
 var http = require('http')
 
-dotenv.config()
+dotenv.config({ path: resolve(__dirname, '..', '..', '.env') })
 
 /**
  * Get port from environment and store in Express.

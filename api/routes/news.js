@@ -19,7 +19,7 @@ const URL_BASE = 'https://newsapi.org/v2/'
 const defaultRequestConfig = {
 	method: 'GET',
 	headers: {
-		'x-api-key': process.env.NEWS_API_KEY || 'd8539dcbedc444b297e91db722e3a318',
+		'x-api-key': process.env.NEWS_API_KEY,
 	},
 }
 

@@ -2,10 +2,15 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 var createError = require('http-errors')
 var express = require('express')
+var { resolve } = require('path')
 var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 var cors = require('cors')
+var dotenv = require('dotenv')
+
+dotenv.config({ path: resolve(__dirname, '..', '.env') })
+
 
 var indexRouter = require('./routes/index')
 var usersRouter = require('./routes/users')
