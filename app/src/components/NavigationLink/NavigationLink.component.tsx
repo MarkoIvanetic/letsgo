@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { Link as RouterLink, LinkProps, useLocation, useResolvedPath } from 'react-router-dom'
 import { NavigationButton } from '@/components/NavigationLink/NavigationLink.style'
 
-export const NavigationLink = ({ children, to, ...rest }: LinkProps) => {
+const NavigationLink = ({ children, to, ...rest }: LinkProps) => {
     const resolved = useResolvedPath(to)
 
     const { pathname, search } = useLocation()
@@ -23,3 +23,5 @@ export const NavigationLink = ({ children, to, ...rest }: LinkProps) => {
         </NavigationButton>
     )
 }
+
+export default NavigationLink

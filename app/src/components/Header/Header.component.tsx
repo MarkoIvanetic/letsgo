@@ -11,9 +11,8 @@ import { NEWS_CATEGORIES } from '@/utils'
 interface HeaderProps {
     onDrawerToggle: () => void
 }
-export default function Header(props: HeaderProps) {
-    const { onDrawerToggle } = props
 
+const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
     return (
         <React.Fragment>
             <AppBar color="primary" position="sticky" elevation={0}>
@@ -52,3 +51,5 @@ export default function Header(props: HeaderProps) {
         </React.Fragment>
     )
 }
+
+export default Header

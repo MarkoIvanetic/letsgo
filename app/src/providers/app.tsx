@@ -22,8 +22,6 @@ type ErrorFallbackProps = {
 }
 
 const ErrorFallback = ({ error }: ErrorFallbackProps) => {
-    console.log(JSON.stringify(error))
-
     return (
         <Container maxWidth={false}>
             <Box

@@ -1,25 +1,21 @@
-import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { NewsURLParamMap } from '@/types'
-import { encodeURLParameterMap } from '@/utils'
+import { useMemo } from 'react'
+import { useSearchParams as useSearchParamsRouter } from 'react-router-dom'
+
+/**
+ * Provides get/set for url parameters, parses url query
+ *
+ * @returns {Object}
+ */
 
 const useSearchParams = () => {
-    const { pathname, search } = useLocation()
-    const navigate = useNavigate()
-    const [params, setParamsState] = useState<NewsURLParamMap>({})
+    const [searchParams, setSearchParams] = useSearchParamsRouter({})
 
-    useEffect(() => {
-        const urlSearchParams = new URLSearchParams(search)
-        const params = Object.fromEntries(urlSearchParams.entries())
-        setParamsState(params)
-    }, [search])
+    const params = useMemo(() => {
+        const urlSearchParams = new URLSearchParams(searchParams)
+        return Object.fromEntries(urlSearchParams.entries())
+    }, [searchParams])
 
-    const setParams = (params: NewsURLParamMap) => {
-        console.log(encodeURLParameterMap(params))
-        navigate(pathname + encodeURLParameterMap(params))
-    }
-
-    return { params, setParams }
+    return { params, setSearchParams }
 }
 
 export default useSearchParams

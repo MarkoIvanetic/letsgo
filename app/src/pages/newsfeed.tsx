@@ -18,15 +18,13 @@ import { useSearchParams } from '@/hooks'
 import { Link } from 'react-router-dom'
 
 export const Newsfeed: React.FC = () => {
-    const { params, setParams } = useSearchParams()
+    const { params, setSearchParams } = useSearchParams()
 
     const { isLoading, isError, data } = useQuery(['news', params], () => getArticleList(params))
 
     const onPaginationChange = (e: React.ChangeEvent<unknown>, page: number): void => {
-        setParams({ ...params, page })
+        setSearchParams({ ...params, page: page.toString() })
     }
-
-    console.log(params.page)
 
     if (isLoading) {
         return (
