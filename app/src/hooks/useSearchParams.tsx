@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useSearchParams as useSearchParamsRouter } from 'react-router-dom'
+import { useSearchParams as useSearchParamsRouter, useParams } from 'react-router-dom'
 
 /**
  * Provides get/set for url parameters, parses url query
@@ -8,14 +8,15 @@ import { useSearchParams as useSearchParamsRouter } from 'react-router-dom'
  */
 
 const useSearchParams = () => {
+    const params = useParams()
     const [searchParams, setSearchParams] = useSearchParamsRouter({})
 
-    const params = useMemo(() => {
+    const search = useMemo(() => {
         const urlSearchParams = new URLSearchParams(searchParams)
         return Object.fromEntries(urlSearchParams.entries())
     }, [searchParams])
 
-    return { params, setSearchParams }
+    return { params, search, setSearchParams }
 }
 
 export default useSearchParams

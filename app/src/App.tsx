@@ -9,9 +9,9 @@ const App: React.FC = () => {
         <AppProvider>
             <Layout>
                 <Routes>
-                    <Route path="/" element={<Navigate to="/news" />} />
-                    <Route path="/news" element={<Newsfeed />} />
-                    <Route path="/news/:slug" element={<Article />} />
+                    <Route path="/" element={<Navigate to="/news/global" />} />
+                    <Route path="/news/:category" element={<Newsfeed />} />
+                    <Route path="/news/:category/:slug" element={<Article />} />
                 </Routes>
             </Layout>
         </AppProvider>

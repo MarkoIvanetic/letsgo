@@ -25,5 +25,15 @@ const generateUUID = seed => {
     })
 }
 
+const uuidMatch = /(?<id>[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12})$/
 
-module.exports = { generateUrlParams, generateSlugFromTitle, generateUUID }
+const parseUUID = url => {
+    if (!url) {
+        return false
+    }
+    const { id } = url.match(uuidMatch)?.groups || {}
+    return id
+}
+
+
+module.exports = { generateUrlParams, generateSlugFromTitle, generateUUID, parseUUID }

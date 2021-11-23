@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Button, Box, Container, CssBaseline, Typography } from '@mui/material'
 // import { HelmetProvider } from 'react-helmet-async'

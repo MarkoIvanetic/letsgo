@@ -1,6 +1,6 @@
 import React from 'react'
 import { useQuery } from 'react-query'
-import { Grid, Typography } from '@mui/material'
+import { Container, Grid, Typography } from '@mui/material'
 import { getArticle } from '@/api'
 import { useParams } from 'react-router-dom'
 
@@ -11,37 +11,39 @@ export const Article: React.FC = () => {
 
     if (isLoading || !data) {
         return (
-            <Grid container rowSpacing={2} sx={{ mx: 'auto' }} xs={12} sm={10} lg={8}>
+            <Grid container rowSpacing={2} sx={{ mx: 'auto' }}>
                 <span>Loading...</span>
             </Grid>
         )
     }
 
     return (
-        <Grid container rowSpacing={2} sx={{ mx: 'auto' }} xs={12} sm={10} lg={8}>
-            <Grid item xs={12}>
-                <img
-                    width={'100%'}
-                    src={data.urlToImage || 'https://picsum.photos/340/200'}
-                    alt={data.title}
-                    loading="lazy"
-                />
+        <Container fixed>
+            <Grid container rowSpacing={2} sx={{ mx: 'auto' }}>
+                <Grid item xs={12}>
+                    <img
+                        width={'100%'}
+                        src={data.urlToImage || 'https://picsum.photos/340/200'}
+                        alt={data.title}
+                        loading="lazy"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography gutterBottom variant="h3" component="div">
+                        {data.title}
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant="body2" color="text.secondary">
+                        {data.description}
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant="body1" color="text.secondary">
+                        {data.content}
+                    </Typography>
+                </Grid>
             </Grid>
-            <Grid item xs={12}>
-                <Typography gutterBottom variant="h3" component="div">
-                    {data.title}
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <Typography variant="body2" color="text.secondary">
-                    {data.description}
-                </Typography>
-            </Grid>
-            <Grid item xs={12}>
-                <Typography variant="body1" color="text.secondary">
-                    {data.content}
-                </Typography>
-            </Grid>
-        </Grid>
+        </Container>
     )
 }

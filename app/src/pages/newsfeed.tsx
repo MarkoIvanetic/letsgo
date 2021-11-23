@@ -18,12 +18,18 @@ import { useSearchParams } from '@/hooks'
 import { Link } from 'react-router-dom'
 
 export const Newsfeed: React.FC = () => {
-    const { params, setSearchParams } = useSearchParams()
+    const {
+        params: { category = 'global' },
+        search,
+        setSearchParams
+    } = useSearchParams()
 
-    const { isLoading, isError, data } = useQuery(['news', params], () => getArticleList(params))
+    const { isLoading, isError, data } = useQuery(['news', category, search.page || '1'], () =>
+        getArticleList(category, search)
+    )
 
     const onPaginationChange = (e: React.ChangeEvent<unknown>, page: number): void => {
-        setSearchParams({ ...params, page: page.toString() })
+        setSearchParams({ ...search, page: page.toString() })
     }
 
     if (isLoading) {
@@ -43,7 +49,7 @@ export const Newsfeed: React.FC = () => {
             <Grid container spacing={2}>
                 {data?.articles.map((article: Article) => {
                     return (
-                        <Grid key={article.url} item xs={12} md={6} lg={4} xl={3}>
+                        <Grid key={article.id} item xs={12} md={6} lg={4} xl={3}>
                             <FeedItem data={article}></FeedItem>
                         </Grid>
                     )
@@ -52,7 +58,7 @@ export const Newsfeed: React.FC = () => {
             {data?.totalResults && data?.totalResults > 0 ? (
                 <Stack spacing={2} sx={{ pt: '16px' }}>
                     <Pagination
-                        page={+params.page || 1}
+                        page={+search.page || 1}
                         color="primary"
                         count={Math.ceil(data?.totalResults / 20)}
                         onChange={onPaginationChange}
@@ -77,10 +83,12 @@ export const FeedItem: React.FC<FeedItemProps> = ({ data }) => {
                 <Typography gutterBottom variant="h5" component="div">
                     {data.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary"></Typography>
+                <Typography variant="body2" color="text.secondary">
+                    {data.description}
+                </Typography>
             </CardContent>
             <CardActions>
-                <Button variant="contained" size="small">
+                <Button variant="contained" size="small" sx={{ textDecoration: 'line-through' }}>
                     Share
                 </Button>
                 <Button component={Link} to={data.slug} variant="contained" size="small" sx={{ marginLeft: '10px' }}>

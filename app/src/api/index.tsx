@@ -22,20 +22,17 @@ interface ArticleListResponse {
     articles: Article[]
 }
 
-const getArticleList = (searchMap: NewsURLParamMap): Promise<ArticleListResponse> => {
-    const queryParam = encodeURLParameterMap(searchMap)
+const getArticleList = (category: string, searchMap: NewsURLParamMap): Promise<ArticleListResponse> => {
+    const queryParam = encodeURLParameterMap({ ...searchMap, q: category })
     return client.get(`news/all${queryParam}`).then(({ data }) => {
         return data as ArticleListResponse
     })
 }
 
-const getArticle = (slug: string, params: NewsURLParamMap): Promise<Article> => {
-    // this is one nasty workaround
-    // compensating for a api with no route for single article
-    const data: Article[] = queryClient.getQueryData(['news']) || []
-    console.log(data)
+const getArticle = (slug: string): Promise<Article> => {
+    const queryParam = encodeURLParameterMap({ slug })
 
-    return Promise.resolve(data.find((article: Article) => article.slug === slug) || ({} as Article))
+    return client.get(`news/article${queryParam}`).then(({ data }) => data)
 }
 
 export { client, getArticleList, getArticle }

@@ -9,7 +9,7 @@ const NavigationLink = ({ children, to, ...rest }: LinkProps) => {
     const { pathname, search } = useLocation()
 
     const match = useMemo(() => {
-        return pathname === resolved.pathname && search === resolved.search
+        return pathname.includes(resolved.pathname)
     }, [pathname, search])
 
     return (

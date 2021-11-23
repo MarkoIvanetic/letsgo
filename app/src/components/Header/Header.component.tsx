@@ -1,11 +1,7 @@
 import * as React from 'react'
-import AppBar from '@mui/material/AppBar'
-import Avatar from '@mui/material/Avatar'
-import Grid from '@mui/material/Grid'
-import IconButton from '@mui/material/IconButton'
+
+import { Container, AppBar, Avatar, Grid, IconButton, Typography, Toolbar } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import Toolbar from '@mui/material/Toolbar'
-import { Container } from '@mui/material'
 import { NavigationLink } from '@/components'
 import { NEWS_CATEGORIES } from '@/utils'
 interface HeaderProps {
@@ -15,7 +11,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
     return (
         <React.Fragment>
-            <AppBar color="primary" position="sticky" elevation={0}>
+            <AppBar color="primary" position="static" elevation={0}>
                 <Toolbar>
                     <Grid container spacing={1} alignItems="center">
                         <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
@@ -23,7 +19,9 @@ const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
                                 <MenuIcon />
                             </IconButton>
                         </Grid>
-                        <Grid item xs />
+                        <Grid item xs>
+                            <Typography variant="h2">News API</Typography>
+                        </Grid>
                         <Grid item>
                             <IconButton color="inherit" sx={{ p: 0.5 }}>
                                 <Avatar />
@@ -32,16 +30,13 @@ const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
                     </Grid>
                 </Toolbar>
             </AppBar>
-            <AppBar component="div" position="static" elevation={0} sx={{ zIndex: 1 }}>
+            <AppBar component="div" position="sticky" elevation={0} sx={{ zIndex: 1 }}>
                 <Container>
                     <Grid container spacing={1} alignItems="center">
-                        <Grid item>
-                            <NavigationLink to={'/news'}>GLOBAL</NavigationLink>
-                        </Grid>
                         {NEWS_CATEGORIES.map(category => {
                             return (
                                 <Grid item key={category}>
-                                    <NavigationLink to={`/news?q=${category}`}>{category.toUpperCase()}</NavigationLink>
+                                    <NavigationLink to={`/news/${category}`}>{category.toUpperCase()}</NavigationLink>
                                 </Grid>
                             )
                         })}
