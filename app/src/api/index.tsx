@@ -15,8 +15,8 @@ axios.interceptors.response.use(
     }
 )
 
-const getArticleList = (): Promise<Article[]> => {
-    return client.get('news/top').then((data: AxiosResponse) => {
+const getArticleList = (params: string): Promise<Article[]> => {
+    return client.get(`news/all${params}`).then((data: AxiosResponse) => {
         const {
             data: { articles }
         } = data

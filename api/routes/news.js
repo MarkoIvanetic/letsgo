@@ -54,7 +54,10 @@ router.get('/top', async function (req, res) {
 })
 
 router.get('/all', async function (req, res) {
-
+    console.log({
+        q: "world", // api requires some form of search narrowing
+        ...req.query
+    });
     const response = await fetchNewsData('everything', {
         q: "world", // api requires some form of search narrowing
         ...req.query

@@ -3,12 +3,15 @@ import { useQuery } from 'react-query'
 import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material'
 import { getArticleList } from '@/api'
 import { Article } from '@/types'
+import { useSearchParams } from '@/hooks'
 import { Link } from 'react-router-dom'
 
 export const Newsfeed: React.FC = () => {
     const page = 1
 
-    const { isLoading, isError, data = [] } = useQuery(['news', page], getArticleList)
+    const { search, parsed } = useSearchParams()
+
+    const { isLoading, isError, data = [] } = useQuery(['news', search, page], () => getArticleList(search))
 
     if (isLoading) {
         return <span>Loading...</span>
