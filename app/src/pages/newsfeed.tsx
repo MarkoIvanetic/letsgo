@@ -1,20 +1,39 @@
 import React from 'react'
 import { useQuery } from 'react-query'
-import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Typography } from '@mui/material'
+import {
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardMedia,
+    Container,
+    Grid,
+    Pagination,
+    Stack,
+    Typography
+} from '@mui/material'
 import { getArticleList } from '@/api'
 import { Article } from '@/types'
 import { useSearchParams } from '@/hooks'
 import { Link } from 'react-router-dom'
 
 export const Newsfeed: React.FC = () => {
-    const page = 1
+    const { params, setParams } = useSearchParams()
 
-    const { search, parsed } = useSearchParams()
+    const { isLoading, isError, data } = useQuery(['news', params], () => getArticleList(params))
 
-    const { isLoading, isError, data = [] } = useQuery(['news', search, page], () => getArticleList(search))
+    const onPaginationChange = (e: React.ChangeEvent<unknown>, page: number): void => {
+        setParams({ ...params, page })
+    }
+
+    console.log(params.page)
 
     if (isLoading) {
-        return <span>Loading...</span>
+        return (
+            <Container fixed>
+                <span>Loading...</span>
+            </Container>
+        )
     }
 
     if (isError) {
@@ -24,7 +43,7 @@ export const Newsfeed: React.FC = () => {
     return (
         <Container fixed>
             <Grid container spacing={2}>
-                {data.map((article: Article) => {
+                {data?.articles.map((article: Article) => {
                     return (
                         <Grid key={article.url} item xs={12} md={6} lg={4} xl={3}>
                             <FeedItem data={article}></FeedItem>
@@ -32,6 +51,18 @@ export const Newsfeed: React.FC = () => {
                     )
                 })}
             </Grid>
+            {data?.totalResults && data?.totalResults > 0 ? (
+                <Stack spacing={2} sx={{ pt: '16px' }}>
+                    <Pagination
+                        page={+params.page || 1}
+                        color="primary"
+                        count={Math.ceil(data?.totalResults / 20)}
+                        onChange={onPaginationChange}
+                        variant="outlined"
+                        shape="rounded"
+                    />
+                </Stack>
+            ) : null}
         </Container>
     )
 }

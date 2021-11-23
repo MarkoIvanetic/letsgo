@@ -7,3 +7,7 @@ export interface Article {
     slug: string
     content: string
 }
+
+export interface NewsURLParamMap {
+    [param: string]: string | number
+}

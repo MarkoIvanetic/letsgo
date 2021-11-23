@@ -9,13 +9,14 @@ export const Article: React.FC = () => {
 
     const pathname: string = location.pathname.split('/').pop() || ''
 
-    console.log(location.pathname)
-    console.log(pathname)
-
     const { isLoading, data } = useQuery(['news', pathname], () => getArticle(pathname))
 
     if (isLoading || !data) {
-        return <span>Loading...</span>
+        return (
+            <Grid container rowSpacing={2} sx={{ mx: 'auto' }} xs={12} sm={10} lg={8}>
+                <span>Loading...</span>
+            </Grid>
+        )
     }
 
     return (

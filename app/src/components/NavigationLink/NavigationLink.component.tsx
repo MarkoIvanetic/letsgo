@@ -1,11 +1,16 @@
 // @ts
-import React from 'react'
-import { Link as RouterLink, LinkProps, useMatch, useResolvedPath } from 'react-router-dom'
+import React, { useMemo } from 'react'
+import { Link as RouterLink, LinkProps, useLocation, useResolvedPath } from 'react-router-dom'
 import { NavigationButton } from '@/components/NavigationLink/NavigationLink.style'
 
 export const NavigationLink = ({ children, to, ...rest }: LinkProps) => {
     const resolved = useResolvedPath(to)
-    const match = useMatch({ path: resolved.pathname, end: true })
+
+    const { pathname, search } = useLocation()
+
+    const match = useMemo(() => {
+        return pathname === resolved.pathname && search === resolved.search
+    }, [pathname, search])
 
     return (
         <NavigationButton

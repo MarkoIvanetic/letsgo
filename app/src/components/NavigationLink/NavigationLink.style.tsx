@@ -8,7 +8,7 @@ const NavigationButton = styled(MuiButton)(
         marginBottom: '5px',
         marginRight: '5px',
         borderRadius: '0',
-        border: '1px solid'
+        borderBottom: '2px solid'
     }),
     { name: 'NavigationLink' }
 )

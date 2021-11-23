@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
 import { Container } from '@mui/material'
 import { NavigationLink } from '@/components'
+import { NEWS_CATEGORIES } from '@/utils'
 interface HeaderProps {
     onDrawerToggle: () => void
 }
@@ -36,17 +37,15 @@ export default function Header(props: HeaderProps) {
                 <Container>
                     <Grid container spacing={1} alignItems="center">
                         <Grid item>
-                            <NavigationLink to={'/news'}>Top</NavigationLink>
+                            <NavigationLink to={'/news'}>GLOBAL</NavigationLink>
                         </Grid>
-                        <Grid item>
-                            <NavigationLink to={'/news'}>Top</NavigationLink>
-                        </Grid>
-                        <Grid item>
-                            <NavigationLink to={'/news'}>Top</NavigationLink>
-                        </Grid>
-                        <Grid item>
-                            <NavigationLink to={'/news'}>Top</NavigationLink>
-                        </Grid>
+                        {NEWS_CATEGORIES.map(category => {
+                            return (
+                                <Grid item key={category}>
+                                    <NavigationLink to={`/news?q=${category}`}>{category.toUpperCase()}</NavigationLink>
+                                </Grid>
+                            )
+                        })}
                     </Grid>
                 </Container>
             </AppBar>

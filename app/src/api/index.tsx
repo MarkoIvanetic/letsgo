@@ -1,9 +1,10 @@
-import { Article } from '@/types'
+import { Article, NewsURLParamMap } from '@/types'
 import axios, { AxiosResponse } from 'axios'
+import { encodeURLParameterMap } from '@/utils'
 
 const client = axios.create({
     baseURL: process.API_ENDPOINT,
-    timeout: 5000
+    timeout: 8000
 })
 
 axios.interceptors.response.use(
@@ -15,13 +16,15 @@ axios.interceptors.response.use(
     }
 )
 
-const getArticleList = (params: string): Promise<Article[]> => {
-    return client.get(`news/all${params}`).then((data: AxiosResponse) => {
-        const {
-            data: { articles }
-        } = data
+interface ArticleListResponse {
+    totalResults: number
+    articles: Article[]
+}
 
-        return articles
+const getArticleList = (searchMap: NewsURLParamMap): Promise<ArticleListResponse> => {
+    const queryParam = encodeURLParameterMap(searchMap)
+    return client.get(`news/all${queryParam}`).then(({ data }) => {
+        return data as ArticleListResponse
     })
 }
 
