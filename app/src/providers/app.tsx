@@ -1,14 +1,11 @@
 import React, { useMemo } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { Button, Box, Container, CssBaseline, Typography } from '@mui/material'
-// import { HelmetProvider } from 'react-helmet-async'
+import { Button, Box, Container, CssBaseline, Typography, PaletteMode } from '@mui/material'
 import { QueryClientProvider } from 'react-query'
 import { AxiosError } from 'axios'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import { BrowserRouter } from 'react-router-dom'
 
-// import { Notifications } from '@/components/Notifications/Notifications/'
-// import { AuthProvider } from '@/lib/auth'
 import { queryClient } from '@/lib/react-query'
 import { ColorModeContext } from '@/context'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
@@ -57,6 +54,25 @@ const ErrorFallback = ({ error }: ErrorFallbackProps) => {
     )
 }
 
+const getDesignTokens = (mode: PaletteMode) => ({
+    palette: {
+        mode,
+        ...(mode === 'light'
+            ? {
+                  background: {
+                      default: 'white',
+                      paper: 'white'
+                  }
+              }
+            : {
+                  background: {
+                      default: '#0e141b',
+                      paper: '#0e141b'
+                  }
+              })
+    }
+})
+
 export const AppProvider = ({ children }: AppProviderProps) => {
     const [darkMode, setDarkMode] = useDarkMode()
 
@@ -73,11 +89,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 
     const theme = useMemo(() => {
         setDarkMode(mode === 'dark')
-        return createTheme({
-            palette: {
-                mode
-            }
-        })
+        return createTheme(getDesignTokens(mode))
     }, [mode])
 
     return (

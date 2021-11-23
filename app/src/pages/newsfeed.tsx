@@ -49,7 +49,7 @@ export const Newsfeed: React.FC = () => {
             <Grid container spacing={2}>
                 {data?.articles.map((article: Article) => {
                     return (
-                        <Grid key={article.id} item xs={12} md={6} lg={4} xl={3}>
+                        <Grid key={article.id} item xs={12} sm={6} lg={4} xl={3}>
                             <FeedItem data={article}></FeedItem>
                         </Grid>
                     )

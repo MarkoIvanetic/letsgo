@@ -16,7 +16,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
     const theme = useTheme()
-    console.log(theme.palette)
 
     const { toggleColorMode } = React.useContext(ColorModeContext)
 
