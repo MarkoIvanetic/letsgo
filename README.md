@@ -41,7 +41,7 @@ This will install node dependencies in containers, propagate enviroment variable
 
 ### :satellite: Starting each app seperately
 
-You can also do it manually. Dont worry about copying env - `dotenv` source it from the root folder.
+You can also do it manually. Don't worry about copying env - `dotenv` source it from the root folder.
 
 For starting the API:
 ````
