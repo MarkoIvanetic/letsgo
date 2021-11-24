@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Container, AppBar, Grid, IconButton, Typography, Toolbar } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
 import { useTheme } from '@mui/material/styles'
 
 import Brightness4Icon from '@mui/icons-material/Brightness4'
@@ -10,11 +9,8 @@ import Brightness7Icon from '@mui/icons-material/Brightness7'
 import { NavigationLink } from '@/components'
 import { NEWS_CATEGORIES } from '@/utils'
 import { ColorModeContext } from '@/context'
-interface HeaderProps {
-    onDrawerToggle: () => void
-}
 
-const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
+const Header: React.FC = () => {
     const theme = useTheme()
 
     const { toggleColorMode } = React.useContext(ColorModeContext)
@@ -25,15 +21,6 @@ const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
                 <Toolbar>
                     <Container>
                         <Grid container spacing={1} alignItems="center">
-                            <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
-                                <IconButton
-                                    color="inherit"
-                                    aria-label="open drawer"
-                                    onClick={onDrawerToggle}
-                                    edge="start">
-                                    <MenuIcon />
-                                </IconButton>
-                            </Grid>
                             <Grid item xs>
                                 <Typography variant="h2">News API</Typography>
                             </Grid>
