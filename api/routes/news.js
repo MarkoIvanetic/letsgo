@@ -59,12 +59,12 @@ router.get('/all', async function (req, res) {
 		console.log('Current cache: ', newsCache.keys())
 	}
 
-	// const response = await fetchNewsData('everything', {
-	// 	...{ ...req.query, q: category }, // api requires some form of search narrowing
-	// })
-	// const data = await response.json()
+	const response = await fetchNewsData('everything', {
+		...{ ...req.query, q: category }, // api requires some form of search narrowing
+	})
+	const data = await response.json()
 
-	const data = fakeNewsData
+	// const data = fakeNewsData
 
 	if (data.status === 'error') {
 		console.log(data.message)
