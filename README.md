@@ -60,3 +60,15 @@ yarn dev
 ````
 
 App is not running on `port:3000`
+
+---
+
+### About the stack
+
+- [Docker](https://www.docker.com/) - leading cause of imposter syndrom among developers
+- [React](https://reactjs.org/) - our most beloved javascript library, especially since class components are off the hook.
+- [React Query](https://react-query.tanstack.com/) - makes fetching, caching, synchronizing and updating server state in your React applications a breeze.
+- [Typescript](https://www.typescriptlang.org/) - validates javascript with type checking, makes code more robust and confident.
+- [Material UI](https://mui.com/) - UI library inspired by Google’s principles on building user interfaces. Uses [emotion](https://emotion.sh/docs/introduction) as it's style engine.
+- [React Testing Library (TBA)](https://testing-library.com/docs/react-testing-library/intro/) - freaking Kent C. Dodds made a library that tests your app in a way it's being used in real world.
+- [Reach UI (TBA)](https://reach.tech/) - provides unstyled components with built-in accessiblity.
