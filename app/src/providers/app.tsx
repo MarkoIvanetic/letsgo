@@ -61,12 +61,14 @@ const getDesignTokens = (mode: PaletteMode) => ({
             ? {
                   background: {
                       default: 'white',
+                      card: '#fff9f9',
                       paper: 'white'
                   }
               }
             : {
                   background: {
                       default: '#0e141b',
+                      card: '#0e141b',
                       paper: '#0e141b'
                   }
               })

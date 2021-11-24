@@ -77,7 +77,7 @@ interface FeedItemProps {
 
 export const FeedItem: React.FC<FeedItemProps> = ({ data }) => {
     return (
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ maxWidth: 345, backgroundColor: 'background.card' }}>
             <CardMedia component="img" height="200" image={data.urlToImage} alt={data.title} />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="div">

@@ -23,25 +23,31 @@ const Header: React.FC<HeaderProps> = ({ onDrawerToggle }) => {
         <React.Fragment>
             <AppBar color="primary" position="static" elevation={0}>
                 <Toolbar>
-                    <Grid container spacing={1} alignItems="center">
-                        <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
-                            <IconButton color="inherit" aria-label="open drawer" onClick={onDrawerToggle} edge="start">
-                                <MenuIcon />
-                            </IconButton>
+                    <Container>
+                        <Grid container spacing={1} alignItems="center">
+                            <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
+                                <IconButton
+                                    color="inherit"
+                                    aria-label="open drawer"
+                                    onClick={onDrawerToggle}
+                                    edge="start">
+                                    <MenuIcon />
+                                </IconButton>
+                            </Grid>
+                            <Grid item xs>
+                                <Typography variant="h2">News API</Typography>
+                            </Grid>
+                            <Grid item>
+                                <IconButton sx={{ ml: 1 }} size="large" onClick={toggleColorMode} color="inherit">
+                                    {theme.palette.mode === 'dark' ? (
+                                        <Brightness7Icon fontSize="inherit" />
+                                    ) : (
+                                        <Brightness4Icon fontSize="inherit" />
+                                    )}
+                                </IconButton>
+                            </Grid>
                         </Grid>
-                        <Grid item xs>
-                            <Typography variant="h2">News API</Typography>
-                        </Grid>
-                        <Grid item>
-                            <IconButton sx={{ ml: 1 }} size="large" onClick={toggleColorMode} color="inherit">
-                                {theme.palette.mode === 'dark' ? (
-                                    <Brightness7Icon fontSize="inherit" />
-                                ) : (
-                                    <Brightness4Icon fontSize="inherit" />
-                                )}
-                            </IconButton>
-                        </Grid>
-                    </Grid>
+                    </Container>
                 </Toolbar>
             </AppBar>
             <AppBar component="div" position="sticky" elevation={0} sx={{ zIndex: 1 }}>
