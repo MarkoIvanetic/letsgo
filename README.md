@@ -1,6 +1,7 @@
 # letsgo ⚛️
 
-- simple app that consumes [News API](https://newsapi.org/)
+simple app that consumes [News API](https://newsapi.org/)
+
 - it's purpose is to discover and showcase few technologies
 - so no apologies for sloppy architecture and bad api
 - granted, ideal stack for this project would resolve around Next.js
