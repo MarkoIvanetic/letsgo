@@ -3,15 +3,10 @@ import Header from '../Header/Header.component'
 import React from 'react'
 
 const Layout: React.FC = ({ children }) => {
-    const [mobileOpen, setMobileOpen] = React.useState(false)
-
-    const handleDrawerToggle = () => {
-        setMobileOpen(!mobileOpen)
-    }
     return (
         <Box sx={{ display: 'flex', minHeight: '100vh' }}>
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <Header onDrawerToggle={handleDrawerToggle} />
+                <Header />
                 <Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: 'background.paper' }}>
                     {children}
                 </Box>
