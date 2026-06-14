@@ -87,7 +87,7 @@ function buildEventLine(event: DigestEvent): string {
   const summary = event.summary?.trim();
 
   return `
-    <div style="margin:0 0 26px; padding:0 0 22px; border-bottom:1px solid #ece7df;">
+    <div style="margin:0 0 18px; padding:0 0 22px; border-bottom:1px solid #ece7df;">
       <p style="margin:0 0 6px; font-size:20px; line-height:1.3; color:#111; font-weight:700;">
         ${event.title}
       </p>
@@ -111,12 +111,14 @@ function buildEventLine(event: DigestEvent): string {
 
 function buildDaySection(day: { label: string; items: DigestEvent[] }): string {
   return `
-    <div style="margin-bottom:28px;">
-      <h2 style="font-size:17px; font-weight:700; letter-spacing:0.08em;
-                 margin:0 0 16px; color:#111; text-transform:uppercase;">
+    <div style="margin-bottom:24px;">
+      <h2 style="font-size:14px; font-weight:700; letter-spacing:0.08em;
+                 margin:0 0 8px; color:#111; text-transform:uppercase;">
         ${day.label}
       </h2>
-      ${day.items.map((e) => buildEventLine(e)).join("")}
+      <div style="padding-left: 8px;">
+        ${day.items.map((e) => buildEventLine(e)).join("")}
+      </div>
     </div>`;
 }
 
