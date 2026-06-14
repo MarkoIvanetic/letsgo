@@ -3,7 +3,6 @@ name: Weekly Digest
 on:
   schedule:
     - cron: "0 15 * * 4" # Thursday 5 PM Zagreb (UTC+2)
-    - cron: "0 10 * * 0" # Sunday   12 PM Zagreb (UTC+2)
   workflow_dispatch: # Manual trigger from the Actions tab
 
 jobs:
