@@ -1,4 +1,10 @@
 import type { DigestEvent } from '../types.ts';
+import {
+  buildEventLink,
+  lastsAtMostOneWeek,
+  parseEventTime,
+  toApiDate,
+} from './utils.ts';
 
 const BASE_URL = 'https://www.infozagreb.hr';
 
@@ -35,20 +41,6 @@ interface IZResponse {
   number_of_results: number;
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
-/** Format a JS Date to the DD.MM.YYYY the API expects */
-function toApiDate(date: Date): string {
-  const d = date.getDate().toString().padStart(2, '0');
-  const m = (date.getMonth() + 1).toString().padStart(2, '0');
-  return `${d}.${m}.${date.getFullYear()}`;
-}
-
-/** "00:00" means no specific time — return undefined so we skip it in the email */
-function parseTime(time: string): string | undefined {
-  return !time || time === '00:00' ? undefined : time;
-}
-
 // ─── Crawler ─────────────────────────────────────────────────────────────────
 
 export async function crawl(): Promise<DigestEvent[]> {
@@ -82,24 +74,23 @@ export async function crawl(): Promise<DigestEvent[]> {
 
   const json = (await res.json()) as IZResponse;
 
-  return json.data.map((event): DigestEvent => {
-    const firstDate = event.dates[0];
-    const location  = event.locations[0]?.name;
+  return json.data
+    .filter((event) => lastsAtMostOneWeek(event.date_from, event.date_to))
+    .map((event): DigestEvent => {
+      const firstDate = event.dates[0];
+      const location  = event.locations[0]?.name;
 
-    // Build the canonical event URL from the category page + slug
-    const link = `${BASE_URL}${event.pages_link}/${event.link}`;
-
-    return {
-      title:     event.name,
-      link,
-      date:      firstDate?.u_date_from ?? new Date().toISOString(),
-      dateFrom:  event.date_from,
-      dateTo:    event.date_to ?? undefined,
-      startTime: firstDate ? parseTime(firstDate.time_from) : undefined,
-      summary:   event.heading ?? '',
-      source:    'InfoZagreb',
-      location,
-      tags:      [event.mainCategoryName],
-    };
-  });
+      return {
+        title:     event.name,
+        link:      buildEventLink(BASE_URL, event.pages_link, event.link),
+        date:      firstDate?.u_date_from ?? new Date().toISOString(),
+        dateFrom:  event.date_from,
+        dateTo:    event.date_to ?? undefined,
+        startTime: parseEventTime(firstDate?.time_from),
+        summary:   event.heading ?? '',
+        source:    'InfoZagreb',
+        location,
+        tags:      [event.mainCategoryName],
+      };
+    });
 }

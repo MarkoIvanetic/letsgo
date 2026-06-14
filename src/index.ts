@@ -1,5 +1,6 @@
+import "dotenv/config";
 import type { DigestEvent } from './types.ts';
-import { fetchAllEvents } from './crawlers/index.js';
+import { fetchAllEvents } from './crawlers/index.ts';
 import { sendDigestEmail } from './emailer.ts';
 
 // ─── Validation ───────────────────────────────────────────────────────────────

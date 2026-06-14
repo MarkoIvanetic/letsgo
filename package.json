@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "start": "tsx src/index.ts",
+    "email:test": "node --import tsx/esm src/send-test-email.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "resend": "^4.0.0",
     "rss-parser": "^3.13.0"
   },
