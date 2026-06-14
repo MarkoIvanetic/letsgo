@@ -14,7 +14,6 @@ const DAY_NAMES = [
   "friday",
   "saturday",
 ];
-const DAY_ABBRS = ["sun", "mon", "tues", "weds", "thurs", "fri", "sat"];
 
 /** "14.06.2026" or ISO string → "2026-06-14" (safe for new Date()) */
 function toDateKey(event: DigestEvent): string {
@@ -46,27 +45,21 @@ function to12h(time: string): string {
     : `${hour}:${m.toString().padStart(2, "0")}${period}`;
 }
 
-/**
- * Build the Skint-style date prefix:
- *   multi-day  → "weds thru 6/21"
- *   timed      → "weds 8:30pm"
- *   plain      → "weds"
- */
-function datePrefix(event: DigestEvent, abbr: string): string {
+function eventTiming(event: DigestEvent): string | undefined {
   if (event.dateTo && event.dateTo !== event.dateFrom) {
-    return `${abbr} thru ${shortDate(event.dateTo)}`;
+    return `Thru ${shortDate(event.dateTo)}`;
   }
   if (event.startTime) {
-    return `${abbr} ${to12h(event.startTime)}`;
+    return to12h(event.startTime);
   }
-  return abbr;
+  return undefined;
 }
 
 // ─── Grouping ─────────────────────────────────────────────────────────────────
 
 function groupByDay(
   events: DigestEvent[],
-): Array<{ key: string; label: string; abbr: string; items: DigestEvent[] }> {
+): Array<{ key: string; label: string; items: DigestEvent[] }> {
   const map = new Map<string, DigestEvent[]>();
 
   for (const event of events) {
@@ -81,38 +74,49 @@ function groupByDay(
     .map(([key, items]) => ({
       key,
       label: DAY_NAMES[dayIndex(key)],
-      abbr: DAY_ABBRS[dayIndex(key)],
       items,
     }));
 }
 
 // ─── HTML builders ────────────────────────────────────────────────────────────
 
-function buildEventLine(event: DigestEvent, abbr: string): string {
-  const prefix = datePrefix(event, abbr);
-  const location = event.location ? ` · ${event.location}` : "";
-  const summary = event.summary ? ` ${event.summary}` : "";
+function buildEventLine(event: DigestEvent): string {
+  const details = [eventTiming(event), event.location, event.source].filter(
+    Boolean,
+  );
+  const summary = event.summary?.trim();
 
   return `
-    <p style="margin:0 0 16px; font-size:15px; line-height:1.65; color:#111;">
-      ${prefix}: <strong>${event.title}</strong>${location}.${summary}
-      <a href="${event.link}"
-         style="color:#d4620a; text-decoration:none; font-weight:600;">&nbsp;&gt;&gt;</a>
-    </p>`;
+    <div style="margin:0 0 26px; padding:0 0 22px; border-bottom:1px solid #ece7df;">
+      <p style="margin:0 0 6px; font-size:20px; line-height:1.3; color:#111; font-weight:700;">
+        ${event.title}
+      </p>
+      <p style="margin:0; font-size:15px; line-height:1.6; color:#555;">
+        ${details.join(" · ")}
+      </p>
+      ${
+        summary
+          ? `
+      <p style="margin:10px 0 0; font-size:16px; line-height:1.7; color:#111;">
+        ${summary}
+      </p>`
+          : ""
+      }
+      <p style="margin:12px 0 0; font-size:15px; line-height:1.4;">
+        <a href="${event.link}"
+           style="color:#d4620a; text-decoration:none; font-weight:700;">See more</a>
+      </p>
+    </div>`;
 }
 
-function buildDaySection(day: {
-  label: string;
-  abbr: string;
-  items: DigestEvent[];
-}): string {
+function buildDaySection(day: { label: string; items: DigestEvent[] }): string {
   return `
     <div style="margin-bottom:28px;">
-      <h2 style="font-size:16px; font-weight:700; text-decoration:underline;
-                 margin:0 0 14px; color:#111; text-transform:lowercase;">
+      <h2 style="font-size:17px; font-weight:700; letter-spacing:0.08em;
+                 margin:0 0 16px; color:#111; text-transform:uppercase;">
         ${day.label}
       </h2>
-      ${day.items.map((e) => buildEventLine(e, day.abbr)).join("")}
+      ${day.items.map((e) => buildEventLine(e)).join("")}
     </div>`;
 }
 
@@ -165,6 +169,8 @@ export async function sendDigestEmail(events: DigestEvent[]): Promise<void> {
     subject: process.env.EMAIL_SUBJECT ?? "your weekly digest",
     html: buildHtml(events),
   });
+
+  console.log("events:", events);
 
   if (error) throw new Error(`Resend error: ${JSON.stringify(error)}`);
   console.log(`✅ Email sent! (id: ${data?.id})`);
