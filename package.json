@@ -1,0 +1,14 @@
+{
+  "name": "weekly-rss-digest",
+  "version": "1.0.0",
+  "description": "Fetches RSS feeds weekly and emails a digest via Resend",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node src/index.js"
+  },
+  "dependencies": {
+    "resend": "^4.0.0",
+    "rss-parser": "^3.13.0"
+  }
+}
