@@ -6,13 +6,13 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // ─── Date/time helpers ────────────────────────────────────────────────────────
 
 const DAY_NAMES = [
-  "sunday",
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday",
+  "nedjelja",
+  "ponedjeljak",
+  "utorak",
+  "srijeda",
+  "četvrtak",
+  "petak",
+  "subota",
 ];
 
 /** "14.06.2026" or ISO string → "2026-06-14" (safe for new Date()) */
@@ -29,28 +29,52 @@ function dayIndex(dateKey: string): number {
   return new Date(`${dateKey}T12:00:00`).getDay();
 }
 
-/** "21.06.2026" → "6/21" */
+/** "21.06.2026" → "21.6." */
 function shortDate(ddmmyyyy: string): string {
   const [d, m] = ddmmyyyy.split(".");
-  return `${parseInt(m)}/${parseInt(d)}`;
+  return `${parseInt(d)}.${parseInt(m)}.`;
 }
 
-/** "20:30" → "8:30pm", "21:00" → "9pm" */
-function to12h(time: string): string {
-  const [h, m] = time.split(":").map(Number);
-  const period = h >= 12 ? "pm" : "am";
-  const hour = h % 12 || 12;
-  return m === 0
-    ? `${hour}${period}`
-    : `${hour}:${m.toString().padStart(2, "0")}${period}`;
+/** "2026-06-14" → "14.06.2026." */
+function longDateFromKey(dateKey: string): string {
+  const [y, m, d] = dateKey.split("-");
+  return `${d}.${m}.${y}.`;
+}
+
+function endDateKey(event: DigestEvent): string {
+  if (event.dateTo) {
+    const [d, m, y] = event.dateTo.split(".");
+    return `${y}-${m}-${d}`;
+  }
+  return toDateKey(event);
+}
+
+function buildSubject(events: DigestEvent[]): string {
+  if (events.length === 0) {
+    return "[LetsGo] Događanja u Zagrebu";
+  }
+
+  const startKey = events
+    .map((event) => toDateKey(event))
+    .sort()[0];
+  const endKey = events
+    .map((event) => endDateKey(event))
+    .sort()
+    .at(-1);
+
+  if (!startKey || !endKey) {
+    return "[LetsGo] Događanja u Zagrebu";
+  }
+
+  return `[LetsGo] Događanja u Zagrebu ${longDateFromKey(startKey)} - ${longDateFromKey(endKey)}`;
 }
 
 function eventTiming(event: DigestEvent): string | undefined {
   if (event.dateTo && event.dateTo !== event.dateFrom) {
-    return `Thru ${shortDate(event.dateTo)}`;
+    return `Do ${shortDate(event.dateTo)}`;
   }
   if (event.startTime) {
-    return to12h(event.startTime);
+    return `U ${event.startTime}`;
   }
   return undefined;
 }
@@ -81,7 +105,11 @@ function groupByDay(
 // ─── HTML builders ────────────────────────────────────────────────────────────
 
 function buildEventLine(event: DigestEvent): string {
-  const details = [eventTiming(event), event.location, event.source].filter(
+  const details = [
+    eventTiming(event),
+    event.location,
+    event.source ? `Izvor: ${event.source}` : undefined,
+  ].filter(
     Boolean,
   );
   const summary = event.summary?.trim();
@@ -104,7 +132,7 @@ function buildEventLine(event: DigestEvent): string {
       }
       <p style="margin:12px 0 0; font-size:15px; line-height:1.4;">
         <a href="${event.link}"
-           style="color:#d4620a; text-decoration:none; font-weight:700;">See more</a>
+           style="color:#d4620a; text-decoration:none; font-weight:700;">Više</a>
       </p>
     </div>`;
 }
@@ -123,16 +151,17 @@ function buildDaySection(day: { label: string; items: DigestEvent[] }): string {
 }
 
 function buildHtml(events: DigestEvent[]): string {
-  const weekOf = new Date().toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-
   const days = groupByDay(events);
+  const subject = buildSubject(events);
+  const startKey = days[0]?.key;
+  const endKey = days.at(-1)?.key;
+  const rangeLabel =
+    startKey && endKey
+      ? `${longDateFromKey(startKey)} - ${longDateFromKey(endKey)}`
+      : "Pregled aktualnih događanja";
 
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="hr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -144,10 +173,10 @@ function buildHtml(events: DigestEvent[]): string {
   <div style="margin-bottom:28px; padding-bottom:16px; border-bottom:2px solid #111;">
     <p style="margin:0; font-size:13px; color:#666; text-transform:uppercase;
               letter-spacing:0.08em;">
-      week of ${weekOf}
+      ${rangeLabel}
     </p>
     <h1 style="margin:6px 0 0; font-size:22px; font-weight:700;">
-      your weekly digest
+      Događanja u Zagrebu
     </h1>
   </div>
 
@@ -155,7 +184,7 @@ function buildHtml(events: DigestEvent[]): string {
 
   <div style="margin-top:32px; padding-top:16px; border-top:1px solid #ddd;
               font-size:12px; color:#999; font-family:sans-serif;">
-    sent by your weekly digest bot
+    Poslao LetsGo
   </div>
 
 </body>
@@ -168,11 +197,9 @@ export async function sendDigestEmail(events: DigestEvent[]): Promise<void> {
   const { data, error } = await resend.emails.send({
     from: process.env.EMAIL_FROM || "onboarding@resend.dev",
     to: process.env.TO_EMAIL ?? "",
-    subject: process.env.EMAIL_SUBJECT ?? "your weekly digest",
+    subject: process.env.EMAIL_SUBJECT || buildSubject(events),
     html: buildHtml(events),
   });
-
-  console.log("events:", events);
 
   if (error) throw new Error(`Resend error: ${JSON.stringify(error)}`);
   console.log(`✅ Email sent! (id: ${data?.id})`);
