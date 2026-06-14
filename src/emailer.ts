@@ -160,7 +160,7 @@ function buildHtml(events: DigestEvent[]): string {
 
 export async function sendDigestEmail(events: DigestEvent[]): Promise<void> {
   const { data, error } = await resend.emails.send({
-    from: process.env.EMAIL_FROM ?? "onboarding@resend.dev",
+    from: process.env.EMAIL_FROM || "onboarding@resend.dev",
     to: process.env.TO_EMAIL ?? "",
     subject: process.env.EMAIL_SUBJECT ?? "your weekly digest",
     html: buildHtml(events),
