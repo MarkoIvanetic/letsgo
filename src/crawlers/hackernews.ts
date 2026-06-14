@@ -1,5 +1,5 @@
 import Parser from 'rss-parser';
-import type { DigestEvent } from '../src/types.ts';
+import type { DigestEvent } from '../types.ts';
 
 const parser = new Parser();
 const MAX_ITEMS = 5;

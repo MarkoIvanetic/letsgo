@@ -1,4 +1,4 @@
-import type { DigestEvent } from '../src/types.ts';
+import type { DigestEvent } from '../types.ts';
 
 const BASE_URL = 'https://www.infozagreb.hr';
 

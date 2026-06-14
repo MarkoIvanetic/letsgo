@@ -1,21 +1,6 @@
-import type { CrawlerFn, DigestEvent } from './types.ts';
+import type { DigestEvent } from './types.ts';
+import { fetchAllEvents } from './crawlers/index.js';
 import { sendDigestEmail } from './emailer.ts';
-
-// ─────────────────────────────────────────────────────────────────────────────
-//  REGISTER YOUR CRAWLERS HERE
-//  1. Create a new file in /crawlers  (copy _template.ts)
-//  2. Import its crawl function below
-//  3. Add it to the `crawlers` array
-// ─────────────────────────────────────────────────────────────────────────────
-
-import { crawl as crawlHN }    from '../crawlers/hackernews.ts';
-import { crawl as crawlDevTo } from '../crawlers/devto.ts';
-
-const crawlers: Array<{ name: string; fn: CrawlerFn }> = [
-  { name: 'Hacker News', fn: crawlHN },
-  { name: 'Dev.to',      fn: crawlDevTo },
-  // { name: 'My Site', fn: crawlMySite },
-];
 
 // ─── Validation ───────────────────────────────────────────────────────────────
 
@@ -38,19 +23,7 @@ async function main(): Promise<void> {
 
   validateEnv();
 
-  // Run all crawlers in parallel; don't let one failure block the rest
-  console.log(`🔍 Running ${crawlers.length} crawler(s)…\n`);
-  const results = await Promise.allSettled(crawlers.map(c => c.fn()));
-
-  const allEvents: DigestEvent[] = results.flatMap((result, i) => {
-    if (result.status === 'fulfilled') {
-      console.log(`  ✓ ${crawlers[i].name}: ${result.value.length} item(s)`);
-      return result.value;
-    } else {
-      console.warn(`  ✗ ${crawlers[i].name}: ${result.reason}`);
-      return [];
-    }
-  });
+  const allEvents: DigestEvent[] = await fetchAllEvents();
 
   // Sort newest first across all sources
   allEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

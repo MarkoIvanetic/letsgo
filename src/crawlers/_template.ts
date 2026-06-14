@@ -2,10 +2,10 @@
 //  CRAWLER TEMPLATE
 //  1. Copy this file  →  crawlers/mysource.ts
 //  2. Fill in the crawl() function below
-//  3. Import and add it to the `crawlers` array in src/index.ts
+//  3. Import and add it to the `crawlers` array in src/crawlers/index.js
 // ─────────────────────────────────────────────────────────────────
 
-import type { DigestEvent } from "../src/types.ts";
+import type { DigestEvent } from "../types.ts";
 
 // Uncomment if your source is an RSS/Atom feed:
 // import Parser from 'rss-parser';
